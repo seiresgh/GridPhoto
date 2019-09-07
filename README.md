@@ -1,4 +1,4 @@
-# slideshow
+# GridPhoto
 
 This is a simple web app that displays pictures in a grid
 to manage your collection of photos.
@@ -10,9 +10,9 @@ It requires python, aiohttp, and mako.
 I only tested it with visual studio code on windows.
 
 Note that the web server and the folder needs to be on the same machine
-so that it has access.
+so that it has access. Although the folder can be a mapped network drive.
 
-How to use:
+# How to use:
 Download all the files.
 Run the python script with visual studio code ( or other python ide).
 Make sure you have all the required components.
