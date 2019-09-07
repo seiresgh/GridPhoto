@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Arial;
+}
+
+.header {
+	text-align: center;
+	padding: 32px;
+}
+
+.list {
+	position: relative;
+	display: inline-block;
+	width: 20%;
+	height: 100%;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+	position: relative;
+	padding: 10px;
+}
+
+.column img {
+	margin-top: 12px;
+	width:100%;
+	cursor: pointer;
+}
+
+/* Clear floats after the columns */
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.textblock { 
+	position: absolute; 
+	top: 4px;
+	right: 10px;
+}
+</style>
+</head>
+<body>
+	<ul style="list-style-type:none" id='listd'>
+	% for dir in dirs:
+		<div onclick='touchMe(this)' style='cursor:pointer'>${dir}</div>
+	% endfor	
+	</ul>
+<div class="row">
+	<ul style="list-style-type:none" id='list'>
+	</ul>
+</div>
+<script>
+	var images = [];
+	var index = 0;
+% for dir in dirs:
+	console.log('${dir}');
+% endfor
+% for file in files:
+	images.push('${file}');
+% endfor
+	while((window.innerHeight + window.scrollY) >= document.body.offsetHeight && images.length>index){
+		loadMoreImage();
+	}
+	// for (i = 0; i < 8; i++){
+	// 	if(images.length>i){
+	// 		loadImage(i);
+	// 		index++;
+	// 	}
+	// }
+	function touchMe(div){
+		console.log(div.innerHTML);
+		parent.document.getElementById('folder').value = div.innerHTML;
+	}
+	function loadMoreImage(){
+		if(index>=images.length)
+			return;
+		loadImage(index);
+		index++;
+	}
+	function loadImage(index){
+		var list = document.getElementById('list');
+		var li = document.createElement('li');
+		li.setAttribute('class', 'list');
+		li.id=images[index]+"_li";
+		list.appendChild(li);
+		var column = document.createElement('div');
+		column.setAttribute('class', 'column');
+		li.appendChild(column);
+		var img = document.createElement('img');
+		img.src = "images/"+images[index];
+		img.id = images[index];
+		img.alt = images[index];
+		img.addEventListener('click', function(){deleteMe(this)}, false);
+		img.addEventListener('load', function(){sizeMe(this)}, false);
+		img.onclick="deleteMe(this)";
+		img.onload="sizeMe(this)";
+		var textblock = document.createElement('div');
+		textblock.setAttribute('class', 'textblock');
+		textblock.setAttribute('id',img.id+'_size');
+		column.appendChild(textblock);
+		column.appendChild(img);
+	}
+	function checkVisible(elm) {
+		var rect = elm.getBoundingClientRect();
+		var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+		return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+	}
+	window.onscroll = function(ev) {
+		var elem = document.getElementById(images[index-1]);
+		console.log(checkVisible(elem));
+		var i = 0;
+		while(document.getElementById(images[i]).getBoundingClientRect().top<0)
+			i++;
+		console.log("element " + i );
+		console.log(document.getElementById(images[1]).getBoundingClientRect().top);
+		//document.getElementById(images[i]+"_li").scrollIntoView();
+		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+			var times = 5 - index % 5;
+			for(i=0;i<times;i++)
+				loadMoreImage();
+		}
+	};
+	function sizeMe(img){
+		console.log(img.id);
+		document.getElementById(img.id+"_size").innerHTML=images.indexOf(img.id)+1+'/'+images.length+' '+img.naturalWidth+"x"+img.naturalHeight;
+		parent.document.getElementById('countMe').innerHTML=index+'/'+images.length;
+	}
+	function deleteMe(img){
+		console.log("DELETING "+img.id+" which is "+images.indexOf(img.id));
+		console.log("in images id is "+images[images.indexOf(img.id)]);
+		var http = new XMLHttpRequest();
+		var url = 'delete';
+		var params = 'image='+img.id;
+		http.open('POST', url, true);
+		http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		http.onreadystatechange = function() {//Call a function when the state changes.
+			if(http.readyState == 4 && http.status == 200) {
+				console.log(http.responseText);
+				var elem = document.getElementById(img.id+"_li");
+				elem.parentNode.removeChild(elem);
+				i = images.indexOf(img.id);
+				console.log('i '+i);
+				console.log(images.indexOf(img.id));
+				console.log(img.id);
+				console.log(images[i]);
+				images.splice(images.indexOf(img.id), 1)
+				index--;
+				console.log('i '+i);
+				console.log(images.indexOf(img.id));
+				console.log(img.id);
+				console.log(images[i]);
+				console.log(document.getElementById(images[i]));
+				console.log(document.getElementById(images[i]+"_size"));
+				for(i;i<index;i++){
+					var img2 = document.getElementById(images[i]);
+					sizeMe(img2);
+				}
+				//parent.document.getElementById('countMe').innerHTML=index+'/'+images.length;
+				loadMoreImage();
+			}
+		}
+		http.send(params);
+	}
+</script>
+</body>
+</html>
