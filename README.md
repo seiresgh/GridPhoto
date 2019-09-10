@@ -23,3 +23,11 @@ Any subfolder will be listed first in the bottom.
 Clicking any photo will delete it.
 The 'go up' button will try to go up a level of the current directory.
 After it returns the parent folder, press go to actually load the photos.
+
+# Run with docker
+a docker file and its requirements.txt is also included.
+Build it like this:
+docker build --tag=gridphoto .
+After you build the image, remember to expose 8080 to a port you desired
+Like this:
+docker run -p 8080:8080 gridphoto
