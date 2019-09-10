@@ -125,7 +125,7 @@ async def handle_index(request):
 async def favicon(request):
 	print('favicon')
 	print(request.url)
-	return web.FileResponse('W:\\1.jpg')
+	return web.FileResponse('1.jpg')
 
 async def root(request):
 	print('root')
