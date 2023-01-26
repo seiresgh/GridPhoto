@@ -66,12 +66,11 @@ async def delete_me(request):
 	print(request.url)
 	data = await request.post()
 	image = data['image']
-	print(image)
-	matching = [s for s in files if image in s]
-	print(matching)
-	if os.path.exists(str(matching[0])):
-		os.remove(str(matching[0]))
-		files.remove(str(matching[0]))
+	victim = path + "\\" + name
+	print(victim)
+	if os.path.exists(victim):
+		os.remove(victim)
+		files.remove(victim)
 		f.remove(image)
 		print("The file does exist")
 	else:
@@ -108,10 +107,9 @@ async def handle_images(request):
 	#print(request.match_info.get('name', "Anonymous"))
 	#print('handle')
 	#print(request.url)
-	print(name)
-	matching = [s for s in files if name in s]
-	print(matching)
-	return web.FileResponse(matching[0])
+	victim = path + "\\" + name
+	print(victim)
+	return web.FileResponse(victim)
 
 async def handle_index(request):
 	name = request.match_info.get('name', "Anonymous")
