@@ -66,7 +66,7 @@ async def delete_me(request):
 	print(request.url)
 	data = await request.post()
 	image = data['image']
-	victim = path + "\\" + name
+	victim = path + "\\" + image
 	print(victim)
 	if os.path.exists(victim):
 		os.remove(victim)
