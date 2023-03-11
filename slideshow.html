@@ -132,7 +132,13 @@ body {
 	};
 	function sizeMe(img){
 		console.log(img.id);
-		document.getElementById(img.id+"_size").innerHTML=images.indexOf(img.id)+1+'/'+images.length+' '+img.naturalWidth+"x"+img.naturalHeight;
+		var iText;
+		if(img.naturalWidth > img.naturalHeight){
+			iText='<font color="red">';
+		}else{
+			iText='<font color="blue">';
+		}
+		document.getElementById(img.id+"_size").innerHTML=iText+(images.indexOf(img.id)+1)+'/'+images.length+' '+img.naturalWidth+"x"+img.naturalHeight+'</font>';
 		parent.document.getElementById('countMe').innerHTML=index+'/'+images.length;
 	}
 	function deleteMe(img){
