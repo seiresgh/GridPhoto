@@ -1,6 +1,7 @@
 from aiohttp import web
 from mako.template import Template
 import os
+import webbrowser
 
 path = os.getcwd()
 index=0
@@ -143,5 +144,5 @@ app.add_routes([
 				web.get('/images/{name}', handle_images),
 				web.get('/', root)
 				],)
-
+webbrowser.open_new("http://localhost:8080")
 web.run_app(app)
