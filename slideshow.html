@@ -111,11 +111,13 @@ body {
 		column.appendChild(img);
 	}
 	function checkVisible(elm) {
+		if(!elm) return;
 		var rect = elm.getBoundingClientRect();
 		var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
 		return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 	}
 	window.onscroll = function(ev) {
+		if(!document.getElementById(images[i])) return;
 		var elem = document.getElementById(images[index-1]);
 		console.log(checkVisible(elem));
 		var i = 0;
