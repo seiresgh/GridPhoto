@@ -3,6 +3,7 @@
 <body>
 	Current dir is ${folder}
 <script>
+	localStorage.setItem("folder", "${folder}");
 	parent.location.reload();
 </script>
 </body>

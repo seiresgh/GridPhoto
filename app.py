@@ -2,6 +2,7 @@ from aiohttp import web
 from mako.template import Template
 import os
 import webbrowser
+import re
 
 path = os.getcwd()
 index=0
@@ -83,7 +84,7 @@ async def goup(request):
 	path = os.path.dirname(path)
 	filetemp = Template(filename='goup.html')
 	load_folder(path)
-	return web.Response(text=filetemp.render(folder=path), content_type='text/html')
+	return web.Response(text=filetemp.render(folder=re.escape(path)), content_type='text/html')
 
 async def slideshow(request):
 	global path
